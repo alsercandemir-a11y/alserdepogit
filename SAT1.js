@@ -1,0 +1,1 @@
+[{"id":"11082519","kod":"1968","aciklama":"SAIT CANDEMIR","tarih":"15.03.2026"}]
