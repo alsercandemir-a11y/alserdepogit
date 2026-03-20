@@ -15,6 +15,7 @@
         .mic-box { text-align: center; padding: 20px; }
         .mic-btn { font-size: 80px; cursor: pointer; color: #ef4444; transition: 0.3s; }
         .mic-btn.dinliyor { color: #22c55e; transform: scale(1.2); }
+        
         #admin_panel { display: none; padding: 20px; background: #1e293b; border-top: 2px solid #334155; }
         input, textarea { width: 100%; padding: 12px; margin: 5px 0; background: #020617; border: 1px solid #334155; color: white; border-radius: 10px; box-sizing: border-box; }
         .firlat-btn { background: #22c55e; color: white; border: none; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; font-size: 18px; }
@@ -37,23 +38,27 @@
 
     <div id="admin_panel">
         <h3 style="color:#22c55e; margin:0;">🛠️ İLAN VE HAFIZA EDİTÖRÜ</h3>
-        <input type="text" id="ad_soyad" placeholder="İlan Sahibi">
-        <input type="text" id="tel_no" placeholder="Telefon">
+        <input type="text" id="ad_soyad" placeholder="İlan Sahibi (Örn: SAİT USTA)">
+        <input type="text" id="tel_no" placeholder="Telefon (Örn: 0539 845 26 14)">
         <input type="file" id="dosya_input" multiple onchange="resimleriIsle(this)">
-        <textarea id="anlatim_metni" rows="2" placeholder="Slayt tanıtım metni..."></textarea>
-        <textarea id="hafiza_listesi" rows="4" placeholder="SORU-CEVAP (Örn) fiyat:500 bin TL"></textarea>
+        <textarea id="anlatim_metni" rows="2" placeholder="Slayt dönerken yapılacak genel tanıtım metni..."></textarea>
+        <textarea id="hafiza_listesi" rows="4" placeholder="SORU-CEVAP HAFIZASI (Örn)&#10;fiyat:500 bin TL&#10;boya:sadece sağ kapıda var&#10;takas:evet olur"></textarea>
         <button class="firlat-btn" onclick="sistemiMuhurle()">🚀 SİSTEMİ MÜHÜRLE VE LİNK ÜRET</button>
         <div id="link_sonuc" style="margin-top:10px; color:#38bdf8; font-weight:bold; word-break:all;"></div>
     </div>
 </div>
 
 <script>
-    // ANA AYARLAR - HİÇ DOKUNMA ABİ
-    const firebaseConfig = { databaseURL: "https://saitdata-default-rtdb.europe-west1.firebasedatabase.app/" };
-    if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+    const cfg = { databaseURL: "https://saitdata-default-rtdb.europe-west1.firebasedatabase.app/" };
+    if (!firebase.apps.length) { firebase.initializeApp(cfg); }
     const db = firebase.database();
 
-    let resimler = [], aktifSira = 0, slaytDongusu, turSayaci = 0, m_tanitim = "", m_hafiza = "";
+    let resimler = [];
+    let aktifSira = 0;
+    let slaytDongusu;
+    let turSayaci = 0;
+    let m_tanitim = "";
+    let m_hafiza = "";
 
     window.onload = () => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -64,7 +69,8 @@
                 if(d) {
                     resimler = d.resimler; m_tanitim = d.metin; m_hafiza = d.hafiza || "";
                     document.getElementById('plaka').innerText = d.ad.toUpperCase() + " | " + d.tel;
-                    const ray = document.getElementById('ray'); ray.innerHTML = "";
+                    const ray = document.getElementById('ray');
+                    ray.innerHTML = "";
                     resimler.forEach(src => { let img = document.createElement('img'); img.src = src; ray.appendChild(img); });
                     document.getElementById('status').innerText = "HOŞ GELDİNİZ, SUNUM İÇİN MİKROFONA DOKUNUN";
                 }
@@ -99,14 +105,28 @@
         });
     }
 
-    function konus(m) { window.speechSynthesis.cancel(); const s = new SpeechSynthesisUtterance(m); s.lang = 'tr-TR'; window.speechSynthesis.speak(s); }
+    function konus(m) {
+        window.speechSynthesis.cancel();
+        const s = new SpeechSynthesisUtterance(m); s.lang = 'tr-TR'; s.rate = 0.95;
+        window.speechSynthesis.speak(s);
+    }
 
-    function asistanKONTROL() { if(resimler.length === 0) return; if(slaytDongusu) { soruDinle(); } else { sunumuBaslat(); } }
+    function asistanKONTROL() {
+        if(resimler.length === 0) return;
+
+        // EĞER SLAYT ÇALIŞIYORSA SORU DİNLEME MODUNA GEÇ
+        if(slaytDongusu) {
+            soruDinle();
+        } else {
+            sunumuBaslat();
+        }
+    }
 
     function sunumuBaslat() {
         aktifSira = 0; turSayaci = 0;
         konus(m_tanitim);
         document.getElementById('status').innerText = "🗣️ ASİSTAN SUNUM YAPIYOR...";
+
         slaytDongusu = setInterval(() => {
             aktifSira++;
             if(aktifSira >= resimler.length) {
@@ -119,13 +139,20 @@
 
     function soruDinle() {
         let Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if(!Rec) return alert("Ses desteği yok.");
+        
         let r = new Rec(); r.lang = 'tr-TR';
-        r.onstart = () => { document.getElementById('m_btn').classList.add('dinliyor'); document.getElementById('status').innerText = "👂 SİZİ DİNLİYORUM..."; };
+        r.onstart = () => {
+            document.getElementById('m_btn').classList.add('dinliyor');
+            document.getElementById('status').innerText = "👂 SİZİ DİNLİYORUM...";
+        };
+        
         r.onresult = e => {
             let q = e.results[0][0].transcript.toLowerCase();
             document.getElementById('status').innerText = "SORDUNUZ: " + q;
             cevapVer(q);
         };
+        
         r.onend = () => { document.getElementById('m_btn').classList.remove('dinliyor'); };
         r.start();
     }
@@ -134,10 +161,13 @@
         let satirlar = m_hafiza.split('\n');
         let buldu = false;
         satirlar.forEach(l => {
-            let p = l.split(':');
-            if(p[0] && q.includes(p[0].trim().toLowerCase())) { konus(p[1].trim()); buldu = true; }
+            let [anahtar, cevap] = l.split(':');
+            if(anahtar && q.includes(anahtar.trim().toLowerCase())) {
+                konus(cevap.trim());
+                buldu = true;
+            }
         });
-        if(!buldu) konus("Bunu bilmiyorum, Sait ustama sorun.");
+        if(!buldu) konus("Bu sorunun cevabını bilmiyorum, Sait ustama sorun.");
     }
 </script>
 </body>
