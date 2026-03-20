@@ -1,69 +1,24 @@
- <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <style>
-        body { background: #0f172a; color: white; font-family: sans-serif; text-align: center; margin: 0; padding: 10px; }
-        #pencere { width: 100%; max-width: 600px; height: 350px; background: #000; margin: 0 auto; overflow: hidden; border-radius: 15px; border: 2px solid #1e293b; position: relative; }
-        #ray { display: flex; transition: 0.6s; height: 100%; }
-        #ray img { width: 100%; height: 100%; object-fit: contain; flex-shrink: 0; }
-        .plaka { background: #2563eb; padding: 12px; font-size: 18px; font-weight: bold; border-radius: 10px; margin-top: 10px; }
-        .admin-panel { background: #1e293b; padding: 15px; border-radius: 15px; margin-top: 15px; text-align: left; }
-        input, textarea { width: 100%; padding: 8px; margin: 5px 0; background: #020617; border: 1px solid #334155; color: white; border-radius: 5px; box-sizing: border-box; }
-        .btn { background: #22c55e; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; font-size: 18px; box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4); }
-        #sayac_kutusu { font-size: 12px; color: #64748b; margin-top: 5px; }
-    </style>
-</head>
-<body>
-
-<div id="pencere">
-    <div id="ray"><div style="padding:100px 20px; color:gray; width:100%;">🔄 SAİT AI SİSTEMİ HAZIRLANIYOR...</div></div>
-</div>
-<div id="plaka_yazi" class="plaka">SAİT AI DİJİTAL VİTRİN</div>
-<div id="sayac_kutusu">👥 Ziyaretçi: <span id="ziyaret_sayisi">0</span></div>
-
-<div style="margin-top:20px;">
-    <div onclick="soruSor()" style="font-size:60px; cursor:pointer;">🎤</div>
-    <div id="status" style="color:#38bdf8; font-weight:bold;">DOKUN VE KONUŞ</div>
-</div>
-
-<div id="admin_p" class="admin-panel">
-    <h3 style="color:#22c55e; margin:0 0 10px 0;">🛠️ İLAN FABRİKASI (3 GÜNLÜK)</h3>
-    <input type="text" id="ad_soyad" placeholder="Ad Soyad">
-    <input type="text" id="tel_no" placeholder="Telefon">
-    <input type="file" id="f_input" multiple onchange="canliOnizle(this)">
-    <textarea id="t_metin" placeholder="Tanıtım yazısı (Sesli okunur)..."></textarea>
-    <textarea id="h_list" placeholder="Soru:Cevap (Örn: Boya var mı:Hayır yok)"></textarea>
-    <button class="btn" onclick="muhurle()">🔐 MÜHÜRLE VE LİNK AL</button>
-    <div id="l_sonuc" style="margin-top:15px; color:#22c55e; font-weight:bold; word-break:all;"></div>
-</div>
-
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-
-<script>
-    // 1. FIREBASE YENİDEN KURULUM (TAM KONTROL)
-    var firebaseConfig = { databaseURL: "https://saitdata-default-rtdb.europe-west1.firebasedatabase.app/" };
-    if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
-    var db = firebase.database(); // İSİM SADECE "db"
+ <script>
+    // 1. FIREBASE BAĞLANTISI VE ÖZEL JSON DÜĞÜMÜ
+    var cfg = { databaseURL: "https://saitdata-default-rtdb.europe-west1.firebasedatabase.app/" };
+    if (!firebase.apps.length) { firebase.initializeApp(cfg); }
+    var db = firebase.database();
 
     var resimListesi = [], ilanId = null;
 
-    // 2. SAYAÇ GÜNCELLEME
-    db.ref('SAYAC').transaction(function(c) { return (c || 0) + 1; });
-    db.ref('SAYAC').on('value', function(s) { document.getElementById('ziyaret_sayisi').innerText = s.val(); });
-
-    // 3. AÇILIŞ VE İLAN ÇEKME
+    // 2. AÇILIŞTA SADECE "ILANLAR_YENI"DEN VERİ ÇEK
     window.addEventListener('DOMContentLoaded', function() {
         var params = new URLSearchParams(window.location.search);
         ilanId = params.get('id');
         if(ilanId) {
-            db.ref('ILANLAR/' + ilanId).once('value').then(function(s) {
+            // SADECE YENİ AÇTIĞIMIZ JSON KLASÖRÜNE BAKIYOR
+            db.ref('ILANLAR_YENI/' + ilanId).once('value').then(function(s) {
                 var d = s.val();
                 if(d) {
+                    // SÜRE KONTROLÜ VE GÖSTERİM MANTIĞI AYNI
                     if(d.exp && Date.now() > d.exp) {
-                        db.ref('ILANLAR/' + ilanId).remove();
-                        document.getElementById('ray').innerHTML = "<div style='padding:100px; color:yellow;'>SÜRESİ DOLDU!</div>";
+                        db.ref('ILANLAR_YENI/' + ilanId).remove();
+                        document.getElementById('ray').innerHTML = "<div style='padding:100px;'>SÜRESİ DOLDU!</div>";
                     } else {
                         document.getElementById('plaka_yazi').innerText = d.ad.toUpperCase() + " | " + d.tel;
                         document.getElementById('admin_p').style.display = 'none';
@@ -78,17 +33,7 @@
         }
     });
 
-    // 4. MÜHÜRLEME FONKSİYONU
-    function canliOnizle(input) {
-        resimListesi = []; var r = document.getElementById('ray'); r.innerHTML = "";
-        Array.from(input.files).forEach(function(file) {
-            var reader = new FileReader(); reader.onload = function(e) {
-                resimListesi.push(e.target.result);
-                var img = document.createElement('img'); img.src = e.target.result; r.appendChild(img);
-            }; reader.readAsDataURL(file);
-        });
-    }
-
+    // 3. MÜHÜRLERKEN "ILANLAR_YENI" İÇİNE KAYDET
     function muhurle() {
         var ad = document.getElementById('ad_soyad').value;
         var tel = document.getElementById('tel_no').value;
@@ -97,7 +42,8 @@
         var yeniId = "SAIT_" + Date.now();
         var expZamani = Date.now() + (3 * 24 * 60 * 60 * 1000);
 
-        db.ref('ILANLAR/' + yeniId).set({
+        // DİĞER JSON'LARA DOKUNMADAN BURAYA YAZAR
+        db.ref('ILANLAR_YENI/' + yeniId).set({
             ad: ad, tel: tel, 
             metin: document.getElementById('t_metin').value,
             hafiza: document.getElementById('h_list').value,
@@ -105,32 +51,10 @@
             exp: expZamani
         }).then(function() {
             var l = window.location.href.split('?')[0] + "?id=" + yeniId;
-            document.getElementById('l_sonuc').innerHTML = "✅ MÜHÜRLENDİ! LİNKİNİZ:<br>" + l;
-            konus("İlan mühürlendi abi, hayırlı olsun.");
+            document.getElementById('l_sonuc').innerHTML = "✅ YENİ JSON'A MÜHÜRLENDİ!<br>" + l;
+            konus("İşlem tamam abi.");
         }).catch(function(hata) {
-            alert("Hata: " + hata.message);
+            alert("Token veya İzin Hatası: " + hata.message);
         });
     }
-
-    function konus(m) { window.speechSynthesis.cancel(); var s = new SpeechSynthesisUtterance(m); s.lang='tr-TR'; window.speechSynthesis.speak(s); }
-    
-    function soruSor() {
-        var Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
-        var r = new Rec(); r.lang = 'tr-TR';
-        r.onstart = function() { document.getElementById('status').innerText = "👂 DİNLİYORUM..."; };
-        r.onresult = function(e) {
-            var q = e.results[0][0].transcript.toLowerCase();
-            document.getElementById('status').innerText = "Soru: " + q;
-            var h = document.getElementById('h_list').value;
-            var b = false;
-            h.split('\n').forEach(function(l) {
-                var p = l.split(':');
-                if(p[0] && q.includes(p[0].trim().toLowerCase())) { konus(p[1].trim()); b = true; }
-            });
-            if(!b) konus("Bunu bilmiyorum, Sait ustama sorun.");
-        };
-        r.start();
-    }
 </script>
-</body>
-</html>
