@@ -18,7 +18,6 @@
         #admin_panel { display: none; padding: 20px; background: #1e293b; border-top: 2px solid #334155; }
         input, textarea { width: 100%; padding: 12px; margin: 5px 0; background: #020617; border: 1px solid #334155; color: white; border-radius: 10px; box-sizing: border-box; }
         .firlat-btn { background: #22c55e; color: white; border: none; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; font-size: 18px; }
-        #sayac_kutusu { color: #64748b; font-size: 14px; margin-bottom: 10px; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -31,57 +30,43 @@
     </div>
     <div id="plaka" class="alt-bant">SAİT AI DİJİTAL ASİSTAN</div>
 
-    <div id="sayac_kutusu">👤 Ziyaretçi: <span id="ziyaret_sayisi">0</span></div>
-
     <div class="mic-box">
         <div id="m_btn" class="mic-btn" onclick="asistanKONTROL()">🎤</div>
         <div id="status" style="color:#38bdf8; font-weight:bold; font-size:18px; margin-top:10px;">SUNUMU BAŞLAT VEYA SORU SOR</div>
     </div>
 
     <div id="admin_panel">
-        <h3 style="color:#22c55e; margin:0;">🛠️ İLAN VE HAFIZA EDİTÖRÜ (3 GÜNLÜK)</h3>
-        <input type="text" id="ad_soyad" placeholder="İlan Sahibi (Örn: SAİT USTA)">
-        <input type="text" id="tel_no" placeholder="Telefon (Örn: 0539 845 26 14)">
+        <h3 style="color:#22c55e; margin:0;">🛠️ İLAN VE HAFIZA EDİTÖRÜ</h3>
+        <input type="text" id="ad_soyad" placeholder="İlan Sahibi">
+        <input type="text" id="tel_no" placeholder="Telefon">
         <input type="file" id="dosya_input" multiple onchange="resimleriIsle(this)">
-        <textarea id="anlatim_metni" rows="2" placeholder="Slayt dönerken yapılacak genel tanıtım metni..."></textarea>
-        <textarea id="hafiza_listesi" rows="4" placeholder="SORU-CEVAP HAFIZASI (Örn) fiyat:500 bin TL boya:yok"></textarea>
+        <textarea id="anlatim_metni" rows="2" placeholder="Slayt tanıtım metni..."></textarea>
+        <textarea id="hafiza_listesi" rows="4" placeholder="SORU-CEVAP (Örn) fiyat:500 bin TL"></textarea>
         <button class="firlat-btn" onclick="sistemiMuhurle()">🚀 SİSTEMİ MÜHÜRLE VE LİNK ÜRET</button>
         <div id="link_sonuc" style="margin-top:10px; color:#38bdf8; font-weight:bold; word-break:all;"></div>
     </div>
 </div>
 
 <script>
-    const cfg = { databaseURL: "https://saitdata-default-rtdb.europe-west1.firebasedatabase.app/" };
-    if (!firebase.apps.length) { firebase.initializeApp(cfg); }
+    // ANA AYARLAR - HİÇ DOKUNMA ABİ
+    const firebaseConfig = { databaseURL: "https://saitdata-default-rtdb.europe-west1.firebasedatabase.app/" };
+    if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
     const db = firebase.database();
 
     let resimler = [], aktifSira = 0, slaytDongusu, turSayaci = 0, m_tanitim = "", m_hafiza = "";
 
-    // 1. ZİYARETÇİ SAYACI
-    db.ref('TOPLAM_ZİYARET').transaction(c => (c || 0) + 1);
-    db.ref('TOPLAM_ZİYARET').on('value', s => { document.getElementById('ziyaret_sayisi').innerText = s.val(); });
-
-    // 2. AÇILIŞ VE OTO-İMHAYI KONTROL ET
     window.onload = () => {
         const urlParams = new URLSearchParams(window.location.search);
         const id = urlParams.get('id');
         if (id) {
-            db.ref('ILANLAR_YENI/' + id).once('value').then(snap => {
+            db.ref('ILANLAR/' + id).once('value').then(snap => {
                 const d = snap.val();
                 if(d) {
-                    // SÜRE KONTROLÜ (3 GÜN DOLDUYSA SİL)
-                    if(d.exp && Date.now() > d.exp) {
-                        db.ref('ILANLAR_YENI/' + id).remove();
-                        document.getElementById('m_durum').innerText = "⚠️ BU İLANIN SÜRESİ DOLMUŞTUR.";
-                        document.getElementById('plaka').innerText = "İLAN YAYINDAN KALKTI";
-                    } else {
-                        resimler = d.resimler; m_tanitim = d.metin; m_hafiza = d.hafiza || "";
-                        document.getElementById('plaka').innerText = d.ad.toUpperCase() + " | " + d.tel;
-                        const ray = document.getElementById('ray');
-                        ray.innerHTML = "";
-                        resimler.forEach(src => { let img = document.createElement('img'); img.src = src; ray.appendChild(img); });
-                        document.getElementById('status').innerText = "HOŞ GELDİNİZ, SUNUM İÇİN MİKROFONA DOKUNUN";
-                    }
+                    resimler = d.resimler; m_tanitim = d.metin; m_hafiza = d.hafiza || "";
+                    document.getElementById('plaka').innerText = d.ad.toUpperCase() + " | " + d.tel;
+                    const ray = document.getElementById('ray'); ray.innerHTML = "";
+                    resimler.forEach(src => { let img = document.createElement('img'); img.src = src; ray.appendChild(img); });
+                    document.getElementById('status').innerText = "HOŞ GELDİNİZ, SUNUM İÇİN MİKROFONA DOKUNUN";
                 }
             });
         } else {
@@ -99,7 +84,6 @@
         }
     }
 
-    // 3. MÜHÜRLEME VE 3 GÜNLÜK DAMGA
     function sistemiMuhurle() {
         const ad = document.getElementById('ad_soyad').value;
         const tel = document.getElementById('tel_no').value;
@@ -107,22 +91,17 @@
         const hafiza = document.getElementById('hafiza_listesi').value;
         if(!ad || !tel || resimler.length === 0) return alert("Eksik var abi!");
 
-        const id = "SAIT_" + Date.now();
-        const exp = Date.now() + (3 * 24 * 60 * 60 * 1000); // TAM 3 GÜN
-
-        db.ref('ILANLAR_YENI/' + id).set({ ad, tel, metin, hafiza, resimler, exp }).then(() => {
+        const id = "SAIT_" + Math.floor(Math.random() * 899999 + 100000);
+        db.ref('ILANLAR/' + id).set({ ad, tel, metin, hafiza, resimler }).then(() => {
             const l = window.location.href.split('?')[0] + "?id=" + id;
             document.getElementById('link_sonuc').innerText = "✅ İLAN LİNKİ: " + l;
-            konus("İlan mühürlendi abi.");
+            alert("İlan Mühürlendi!");
         });
     }
 
-    function konus(m) { window.speechSynthesis.cancel(); const s = new SpeechSynthesisUtterance(m); s.lang = 'tr-TR'; s.rate = 0.95; window.speechSynthesis.speak(s); }
+    function konus(m) { window.speechSynthesis.cancel(); const s = new SpeechSynthesisUtterance(m); s.lang = 'tr-TR'; window.speechSynthesis.speak(s); }
 
-    function asistanKONTROL() {
-        if(resimler.length === 0) return;
-        if(slaytDongusu) { soruDinle(); } else { sunumuBaslat(); }
-    }
+    function asistanKONTROL() { if(resimler.length === 0) return; if(slaytDongusu) { soruDinle(); } else { sunumuBaslat(); } }
 
     function sunumuBaslat() {
         aktifSira = 0; turSayaci = 0;
