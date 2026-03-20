@@ -1,116 +1,107 @@
-<style>
-    #pencere { width: 100%; height: 500px; background: #000; overflow: hidden; position: relative; border-radius: 15px; }
-    #ray { display: flex; height: 100%; transition: transform 0.6s ease-in-out; }
+ <style>
+    body { background: #0f172a; color: white; font-family: sans-serif; text-align: center; padding: 20px; }
+    #pencere { width: 100%; max-width: 600px; height: 400px; background: #000; margin: 0 auto; overflow: hidden; border-radius: 15px; border: 3px solid #1e293b; position: relative; }
+    #ray { display: flex; transition: 0.6s; height: 100%; }
     #ray img { width: 100%; height: 100%; object-fit: contain; flex-shrink: 0; }
-    .plaka { width: 100%; background: #2563eb; color: white; padding: 15px 0; font-size: 24px; font-weight: 800; text-align: center; margin-top: 10px; border-radius: 10px; }
-    .mic-box { text-align: center; padding: 20px; }
-    .mic-btn { font-size: 70px; cursor: pointer; color: #ef4444; }
-    #admin_panel { padding: 20px; background: #1e293b; border-radius: 15px; margin-top: 20px; display: none; }
-    input, textarea { width: 100%; padding: 10px; margin: 5px 0; background: #020617; border: 1px solid #334155; color: white; border-radius: 8px; }
-    .btn { background: #22c55e; color: white; border: none; padding: 15px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; }
+    .plaka { background: #2563eb; padding: 15px; font-size: 20px; font-weight: bold; border-radius: 10px; margin-top: 10px; }
+    .admin-panel { background: #1e293b; padding: 20px; border-radius: 15px; margin-top: 20px; text-align: left; }
+    input, textarea { width: 100%; padding: 10px; margin: 5px 0; background: #020617; border: 1px solid #334155; color: white; border-radius: 8px; box-sizing: border-box; }
+    .btn { background: #22c55e; color: white; border: none; padding: 15px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
 </style>
 
 <div id="pencere">
-    <div id="ray"><div style="color:gray; padding:100px; text-align:center;">🔄 SİSTEM YÜKLENİYOR...</div></div>
+    <div id="ray"><div id="m_durum" style="padding:150px 20px; color:gray;">📸 İLAN VERİSİ VEYA RESİM BEKLENİYOR...</div></div>
 </div>
-<div id="plaka_div" class="plaka">SAİT AI DİJİTAL VİTRİN</div>
+<div id="plaka_yazi" class="plaka">SAİT AI DİJİTAL VİTRİN</div>
 
-<div class="mic-box">
-    <div class="mic-btn" onclick="soruSor()">🎤</div>
-    <div id="durum" style="color:#38bdf8; font-weight:bold;">SUNUM OTOMATİK BAŞLAR - SORU İÇİN DOKUN</div>
+<div style="margin-top:20px;">
+    <div onclick="soruSor()" style="font-size:60px; cursor:pointer;">🎤</div>
+    <div id="status" style="color:#38bdf8;">DOKUN VE KONUŞ</div>
 </div>
 
-<div id="admin_panel">
-    <h3 style="color:#22c55e;">🛠️ İLAN FABRİKASI</h3>
-    <input type="text" id="ad" placeholder="Satıcı Adı">
-    <input type="text" id="tel" placeholder="Telefon">
-    <input type="file" id="dosya" multiple onchange="onizle(this)">
-    <textarea id="metin" placeholder="Genel tanıtım..."></textarea>
-    <textarea id="hafiza" placeholder="Soru:Cevap (alt alta)"></textarea>
-    <button class="btn" onclick="muhurle()">🚀 MÜHÜRLE VE LİNK AL</button>
-    <div id="link_sonuc" style="word-break:all; margin-top:10px; color:#22c55e;"></div>
+<div id="admin_p" class="admin-panel">
+    <h3 style="color:#22c55e; margin:0 0 10px 0;">🛠️ İLAN FABRİKASI</h3>
+    <input type="text" id="ad_soyad" placeholder="Satıcı Adı">
+    <input type="text" id="tel_no" placeholder="Telefon">
+    <input type="file" id="f_input" multiple onchange="canli(this)">
+    <textarea id="t_metin" placeholder="Tanıtım yazısı..."></textarea>
+    <textarea id="h_list" placeholder="Soru:Cevap (alt alta)"></textarea>
+    <button class="btn" onclick="muhurle()">🔐 MÜHÜRLE VE LİNK AL</button>
+    <div id="l_sonuc" style="margin-top:10px; color:#38bdf8; word-break:all;"></div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
 <script>
-    const cfg = { databaseURL: "https://saitdata-default-rtdb.europe-west1.firebasedatabase.app/" };
+    var cfg = { databaseURL: "https://saitdata-default-rtdb.europe-west1.firebasedatabase.app/" };
     if (!firebase.apps.length) firebase.initializeApp(cfg);
-    const db = firebase.database();
+    var db = firebase.database();
 
-    let resimler = [], aktif = 0, dongu, tanitim = "", hafiza = "", id = null, oto = false;
+    var resimler = [], tanitim = "", hafiza = "", id = null;
 
-    // AÇILIŞ KONTROLÜ
-    (function init() {
-        const params = new URLSearchParams(window.location.search);
-        id = params.get('id');
-        if (id) {
-            db.ref('ILANLAR/' + id).once('value').then(snap => {
-                const d = snap.val();
+    // AÇILIŞTA VERİ ÇEK
+    (function() {
+        var urlP = new URLSearchParams(window.location.search);
+        id = urlP.get('id');
+        if(id) {
+            db.ref('ILANLAR/' + id).once('value').then(function(s) {
+                var d = s.val();
                 if(d) {
                     resimler = d.resimler; tanitim = d.metin; hafiza = d.hafiza;
-                    document.getElementById('plaka_div').innerText = d.ad.toUpperCase() + " | " + d.tel;
-                    const r = document.getElementById('ray'); r.innerHTML = "";
-                    resimler.forEach(s => { let i = document.createElement('img'); i.src = s; r.appendChild(i); });
+                    document.getElementById('plaka_yazi').innerText = d.ad.toUpperCase() + " | " + d.tel;
+                    document.getElementById('admin_p').style.display = 'none';
+                    yükle();
                 }
             });
-        } else {
-            document.getElementById('admin_panel').style.display = "block";
         }
     })();
 
-    function onizle(input) {
-        resimler = []; const r = document.getElementById('ray'); r.innerHTML = "";
-        Array.from(input.files).forEach(f => {
-            let rd = new FileReader(); rd.onload = e => { 
-                resimler.push(e.target.result); 
-                let i = document.createElement('img'); i.src = e.target.result; r.appendChild(i);
+    function canli(input) {
+        resimler = [];
+        var r = document.getElementById('ray'); r.innerHTML = "";
+        Array.from(input.files).forEach(function(f) {
+            var rd = new FileReader(); rd.onload = function(e) {
+                resimler.push(e.target.result);
+                var img = document.createElement('img'); img.src = e.target.result; r.appendChild(img);
             }; rd.readAsDataURL(f);
         });
     }
 
-    function muhurle() {
-        const ad = document.getElementById('ad').value, tel = document.getElementById('tel').value;
-        const metin = document.getElementById('metin').value, hfz = document.getElementById('hafiza').value;
-        if(!id) id = "SAIT_" + Date.now();
-        db.ref('ILANLAR/' + id).set({ ad, tel, metin, hafiza: hfz, resimler }).then(() => {
-            const l = window.location.href.split('?')[0] + "?id=" + id;
-            document.getElementById('link_sonuc').innerText = "✅ LİNK: " + l;
+    function yükle() {
+        var r = document.getElementById('ray'); r.innerHTML = "";
+        resimler.forEach(function(src) {
+            var img = document.createElement('img'); img.src = src; r.appendChild(img);
         });
     }
 
-    window.onclick = () => {
-        if(!oto && resimler.length > 0) {
-            oto = true; konus(tanitim);
-            dongu = setInterval(() => {
-                aktif = (aktif + 1) % resimler.length;
-                document.getElementById('ray').style.transform = `translateX(-${aktif * 100}%)`;
-                if(aktif === 0) konus(tanitim);
-            }, 3000);
-        }
-    };
-
-    function konus(m) {
-        window.speechSynthesis.cancel();
-        const s = new SpeechSynthesisUtterance(m); s.lang = 'tr-TR'; s.rate = 0.9;
-        window.speechSynthesis.speak(s);
+    function muhurle() {
+        var ad = document.getElementById('ad_soyad').value, tel = document.getElementById('tel_no').value;
+        var mt = document.getElementById('t_metin').value, hf = document.getElementById('h_list').value;
+        if(!ad || resimler.length == 0) return alert("Eksik bilgi abi!");
+        if(!id) id = "SAIT_" + Date.now();
+        db.ref('ILANLAR/' + id).set({ad:ad, tel:tel, metin:mt, hafiza:hf, resimler:resimler}).then(function() {
+            var l = window.location.href.split('?')[0] + "?id=" + id;
+            document.getElementById('l_sonuc').innerText = "✅ LİNKİN: " + l;
+        });
     }
 
     function soruSor() {
-        window.speechSynthesis.cancel();
-        let Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
-        let r = new Rec(); r.lang = 'tr-TR';
-        r.onstart = () => { document.getElementById('durum').innerText = "👂 DİNLİYORUM..."; };
-        r.onresult = e => {
-            let q = e.results[0][0].transcript.toLowerCase();
-            let satirlar = hafiza.split('\n'), buldu = false;
-            satirlar.forEach(l => {
-                let [k, c] = l.split(':');
-                if(k && q.includes(k.trim().toLowerCase())) { konus(c.trim()); buldu = true; }
+        var Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if(!Rec) return alert("Tarayıcı desteklemiyor!");
+        var r = new Rec(); r.lang = 'tr-TR';
+        r.onstart = function() { document.getElementById('status').innerText = "👂 DİNLİYORUM..."; };
+        r.onresult = function(e) {
+            var q = e.results[0][0].transcript.toLowerCase();
+            var b = false;
+            hafiza.split('\n').forEach(function(l) {
+                var k = l.split(':')[0], c = l.split(':')[1];
+                if(k && q.includes(k.trim().toLowerCase())) { konus(c.trim()); b = true; }
             });
-            if(!buldu) konus("Bu bilgiyi bilmiyorum, Sait ustama sorun.");
+            if(!b) konus("Onu bilmiyorum abi.");
         };
         r.start();
     }
+
+    function konus(m) { window.speechSynthesis.cancel(); var s = new SpeechSynthesisUtterance(m); s.lang='tr-TR'; window.speechSynthesis.speak(s); }
 </script>
