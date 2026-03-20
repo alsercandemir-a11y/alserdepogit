@@ -1,31 +1,74 @@
- <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+ <style>
+    body { background: #0f172a; color: white; font-family: sans-serif; text-align: center; margin: 0; padding: 10px; }
+    #pencerem { width: 100%; max-width: 600px; height: 350px; background: #000; margin: 0 auto; overflow: hidden; border-radius: 15px; border: 3px solid #1e293b; position: relative; }
+    #ray { display: flex; transition: 0.6s; height: 100%; }
+    #ray img { width: 100%; height: 100%; object-fit: contain; flex-shrink: 0; }
+    .plaka { background: #2563eb; padding: 12px; font-size: 18px; font-weight: bold; border-radius: 10px; margin-top: 10px; }
+    .panel { background: #1e293b; padding: 15px; border-radius: 15px; margin-top: 15px; text-align: left; }
+    input, textarea { width: 100%; padding: 8px; margin: 5px 0; background: #020617; border: 1px solid #334155; color: white; border-radius: 5px; box-sizing: border-box; }
+    .m-btn { background: #22c55e; color: white; border: none; padding: 15px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; font-size: 18px; }
+</style>
+
+<div id="pencerem">
+    <div id="ray"><div style="padding:100px 20px; color:gray; width:100%;">🔄 SAİT AI HAZIR...</div></div>
+</div>
+<div id="plaka_yazi" class="plaka">DİJİTAL VİTRİN</div>
+
+<div id="adm_panel" class="panel">
+    <h3 style="color:#22c55e; margin:0;">🛠️ İLAN FABRİKASI</h3>
+    <input type="text" id="ad_soyad" placeholder="İsim Soyisim">
+    <input type="text" id="tel_no" placeholder="Telefon">
+    <input type="file" id="f_input" multiple onchange="onizle(this)">
+    <textarea id="t_metin" placeholder="Tanıtım yazısı (Sesli okuma)..."></textarea>
+    <textarea id="h_list" placeholder="Soru:Cevap (Hafıza)"></textarea>
+    <button class="m-btn" onclick="muhurle()">🔐 MÜHÜRLE VE LİNK AL</button>
+    <div id="l_sonuc" style="margin-top:15px; color:#38bdf8; word-break:all;"></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
 <script>
-    // 1. FİREBASE BAĞLANTISI (YENİDEN KURULDU)
     var cfg = { databaseURL: "https://saitdata-default-rtdb.europe-west1.firebasedatabase.app/" };
-    if (!firebase.apps.length) { firebase.initializeApp(cfg); }
+    if (!firebase.apps.length) firebase.initializeApp(cfg);
     var db = firebase.database();
+    var resimler = [], ilanId = null;
 
-    // 2. MÜHÜRLEME BUTONU ÇALIŞTIRICI
-    function muhurle() {
-        var ad = document.getElementById('ad_soyad').value;
-        var tel = document.getElementById('tel_no').value;
-        if(!ad || resimListesi.length == 0) return alert("Eksik bilgi!");
+    window.onload = function() {
+        var p = new URLSearchParams(window.location.search);
+        ilanId = p.get('id');
+        if(ilanId) {
+            db.ref('ILANLAR_YENI/' + ilanId).once('value').then(function(s) {
+                var d = s.val();
+                if(d) {
+                    if(d.exp && Date.now() > d.exp) {
+                        db.ref('ILANLAR_YENI/' + ilanId).remove();
+                        document.getElementById('ray').innerHTML = "<div style='padding:100px;'>SÜRESİ DOLDU!</div>";
+                    } else {
+                        document.getElementById('plaka_yazi').innerText = d.ad.toUpperCase() + " | " + d.tel;
+                        document.getElementById('adm_panel').style.display = 'none';
+                        var r = document.getElementById('ray'); r.innerHTML = "";
+                        d.resimler.forEach(function(s) { var img = document.createElement('img'); img.src = s; r.appendChild(img); });
+                    }
+                }
+            });
+        }
+    };
 
-        var yeniId = "SAIT_" + Date.now();
-        var expZamani = Date.now() + (3 * 24 * 60 * 60 * 1000); // 3 Günlük Süre
-
-        // VERİLERİ 'ILANLAR_YENI' KLASÖRÜNE GÖNDERİR
-        db.ref('ILANLAR_YENI/' + yeniId).set({
-            ad: ad, tel: tel,
-            metin: document.getElementById('t_metin').value,
-            hafiza: document.getElementById('h_list').value,
-            resimler: resimListesi,
-            exp: expZamani
-        }).then(function() {
-            var l = window.location.href.split('?')[0] + "?id=" + yeniId;
-            document.getElementById('l_sonuc').innerHTML = "✅ MÜHÜRLENDİ! LİNKİN:<br>" + l;
+    function onizle(i) {
+        resimler = []; var r = document.getElementById('ray'); r.innerHTML = "";
+        Array.from(i.files).forEach(f => {
+            var rd = new FileReader(); rd.onload = e => { resimler.push(e.target.result); var img = document.createElement('img'); img.src = e.target.result; r.appendChild(img); };
+            rd.readAsDataURL(f);
         });
+    }
+
+    function muhurle() {
+        var ad = document.getElementById('ad_soyad').value, tel = document.getElementById('tel_no').value;
+        if(!ad || resimler.length == 0) return alert("Eksik veri!");
+        var id = "SAIT_" + Date.now();
+        var exp = Date.now() + (3 * 24 * 60 * 60 * 1000);
+        db.ref('ILANLAR_YENI/' + id).set({ ad:ad, tel:tel, metin:document.getElementById('t_metin').value, hafiza:document.getElementById('h_list').value, resimler:resimler, exp:exp })
+        .then(() => { document.getElementById('l_sonuc').innerHTML = "✅ LİNKİN:<br>" + window.location.href.split('?')[0] + "?id=" + id; });
     }
 </script>
