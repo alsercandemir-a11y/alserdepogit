@@ -913,42 +913,136 @@ const kadriye_dersleri = [
   { "id": 910, "hadis_metni": "Zulmetmekten sakınınız.", "erva_hoca_anlatimi": "Güçlüyken zayıfı ezmek değil, onu korumak bize yakışır.", "duygu": "gururlu" },
   // ... (Geri kalan 911-999 arası hadisler mantıksal tekrar ve pekiştirme ile devam eder)
   { "id": 1000, "hadis_metni": "Müslüman, dilinden ve elinden insanların selamette olduğu kimsedir.", "erva_hoca_anlatimi": "Ve işte bininci hadis! Arkadaşlar, 1000 tane pırlanta öğrendik. Artık hepimiz birer yürüyen edep abidesiyiz!", "duygu": "nurlu_gulucuk" },
+  ];
+
+const esmaul_husna_dersleri = [
+  { "id": 1, "isim": "Allah", "manasi": "Her şeyin yaratıcısı, tek olan.", "erva_hoca_anlatimi": "Arkadaşlar, Rabbimizin en özel ismi budur. O bizi çok seven ve her an yanımızda olandır.", "duygu": "nurlu_bakis" },
+  { "id": 2, "isim": "Er-Rahman", "manasi": "Dünyadaki tüm canlılara merhamet eden.", "erva_hoca_anlatimi": "Bakın kuşlara, çiçeklere, kedilere... Hepsine yemeğini veren Rahman olan Rabbimizdir.", "duygu": "sefkat" },
+  { "id": 3, "isim": "Er-Rahim", "manasi": "Ahirette sadece müminlere rahmet eden.", "erva_hoca_anlatimi": "Arkadaşlar, Rabbimiz o kadar merhametli ki, cennette bizi en güzel sürprizlerle karşılayacak olan O'dur.", "duygu": "huzur" },
+  { "id": 4, "isim": "El-Melik", "manasi": "Görünen ve görünmeyen alemlerin tek sahibi.", "erva_hoca_anlatimi": "Bütün dünya, yıldızlar ve galaksiler O'nun! Biz de O'nun en sevdiği kullarıyız.", "duygu": "gururlu" },
+  { "id": 5, "isim": "El-Kuddüs", "manasi": "Her türlü eksiklikten uzak, tertemiz olan.", "erva_hoca_anlatimi": "Rabbimiz pırıl pırıldır arkadaşlar. Biz de kalbimizi iyilikle yıkayıp O'na layık çocuklar olmalıyız.", "duygu": "nurlu_gulucuk" },
+  { "id": 6, "isim": "Es-Selam", "manasi": "Kullarını tehlikelerden selamete çıkaran.", "erva_hoca_anlatimi": "Korktuğunuzda hemen 'Ya Selam' deyin. O sizi korur, kalbinize huzur verir.", "duygu": "tebessum" },
+  { "id": 7, "isim": "El-Mü'min", "manasi": "Gönüllerde iman ışığı yakan, güven veren.", "erva_hoca_anlatimi": "O'na inanan kalp asla korkmaz. Rabbimiz bize güven verir, bizi yarı yolda bırakmaz.", "duygu": "guven" },
+  { "id": 8, "isim": "El-Müheymin", "manasi": "Her şeyi görüp gözeten, koruyan.", "erva_hoca_anlatimi": "Annemiz görmese de, öğretmenimiz duymasa da Rabbimiz bizi her an sevgiyle izliyor.", "duygu": "sakin" },
+  { "id": 9, "isim": "El-Aziz", "manasi": "İzzet sahibi, mağlup edilmesi imkansız olan.", "erva_hoca_anlatimi": "O kadar güçlüdür ki O'nun yanındaysak biz de her zorluğu aşarız evvallah!", "duygu": "gururlu" },
+  { "id": 10, "isim": "El-Cebbar", "manasi": "Dilediğini yapan, kırılanları onaran.", "erva_hoca_anlatimi": "Kalbiniz mi kırıldı? Birine mi üzüldünüz? Rabbimiz 'Cebbar' ismiyle kalbinizi hemen iyileştirir.", "duygu": "sefkat" },
+  { "id": 11, "isim": "El-Mütekebbir", "manasi": "Büyüklükte eşi benzeri olmayan.", "erva_hoca_anlatimi": "En büyük O'dur arkadaşlar! Biz O'nun karşısında eğiliriz ki kimsenin karşısında eğilmeyelim.", "duygu": "edep" },
+  { "id": 12, "isim": "El-Halik", "manasi": "Her şeyi yoktan var eden.", "erva_hoca_anlatimi": "Şu güzel gözlerimizi, ellerimizi, dünyayı kimse yokken O tasarladı ve yarattı.", "duygu": "nurlu_bakis" },
+  { "id": 13, "isim": "El-Bari", "manasi": "Her şeyi kusursuz ve birbirine uygun yaratan.", "erva_hoca_anlatimi": "Balıklar için denizi, kuşlar için gökyüzünü ne güzel de ayarlamış değil mi?", "duygu": "neseli" },
+  { "id": 14, "isim": "El-Musavvir", "manasi": "Her şeye en güzel şekli veren.", "erva_hoca_anlatimi": "Parmak izimize kadar hepimizi farklı ve özel süslemiş. Hepimiz birer sanat eseriyiz!", "duygu": "mutlu" },
+  { "id": 15, "isim": "El-Gaffar", "manasi": "Günahları çokça bağışlayan.", "erva_hoca_anlatimi": "Hata mı yaptık? Hemen 'Ya Gaffar' diyelim. O bizi affetmek için her zaman bekliyor.", "duygu": "huzur" },
+  { "id": 16, "isim": "El-Kahhar", "manasi": "Her şeye galip gelen, zalimleri cezalandıran.", "erva_hoca_anlatimi": "Kötülük yapanlar sanmasın ki yanına kalacak. Rabbimiz adaletiyle her şeyi çözer.", "duygu": "ciddi" },
+  { "id": 17, "isim": "El-Vehhab", "manasi": "Karşılıksız, bol bol nimet veren.", "erva_hoca_anlatimi": "Bize bu güzel aileyi, arkadaşları, oyuncakları hep O hediye etti arkadaşlar.", "duygu": "neseli" },
+  { "id": 18, "isim": "Er-Rezzak", "manasi": "Her canlının rızkını veren.", "erva_hoca_anlatimi": "Rızkımız için endişe etmeyelim. Karıncayı bile aç bırakmayan Rabbimiz bizi unutur mu?", "duygu": "tebessum" },
+  { "id": 19, "isim": "El-Fettah", "manasi": "Her türlü zorluk kapısını açan.", "erva_hoca_anlatimi": "Derslerinizde zorlandığınızda 'Ya Fettah' derseniz, zihniniz bir çiçek gibi açılır.", "duygu": "nurlu_gulucuk" },
+  { "id": 20, "isim": "El-Alim", "manasi": "Gizli, açık her şeyi en iyi bilen.", "erva_hoca_anlatimi": "Aklımızdan geçen güzel niyetleri bile bilir ve bize onun için sevap yazar.", "duygu": "nurlu_bakis" },
+  { "id": 21, "isim": "El-Kabiz", "manasi": "Dilediğine darlık veren, rızkı daraltan.", "erva_hoca_anlatimi": "Bazen sabretmemiz için işler zorlaşabilir. Bu da bizim imtihanımızdır arkadaşlar.", "duygu": "sakin" },
+  { "id": 22, "isim": "El-Basit", "manasi": "Dilediğine bolluk veren, kalpleri ferahlatan.", "erva_hoca_anlatimi": "Rabbimiz kalbimizi bir açtı mı, dünya içine sığsa yine de neşemiz bitmez!", "duygu": "mutlu" },
+{ "id": 23, "isim": "El-Hafid", "manasi": "Yukarıdan aşağıya indiren, alçaltan.", "erva_hoca_anlatimi": "Kibirlenenleri, başkasına tepeden bakanları Rabbimiz sevmez arkadaşlar.", "duygu": "ciddi" },
+  { "id": 24, "isim": "Er-Rafi", "manasi": "Yükselten, yukarı kaldıran.", "erva_hoca_anlatimi": "Alçakgönüllü olan çocukları Rabbimiz her zaman yüceltir.", "duygu": "tebessum" },
+  { "id": 25, "isim": "El-Muiz", "manasi": "İzzet veren, aziz kılan.", "erva_hoca_anlatimi": "Gerçek onur ve şeref sadece Allah'ın yanındadır.", "duygu": "gururlu" },
+  { "id": 26, "isim": "El-Müzil", "manasi": "Zillete düşüren, değersiz kılan.", "erva_hoca_anlatimi": "Kötülük peşinde koşanlar kendi değerlerini kendileri düşürür.", "duygu": "sakin" },
+  { "id": 27, "isim": "Es-Semi", "manasi": "Her şeyi en iyi işiten.", "erva_hoca_anlatimi": "Fısıltıyla ettiğimiz duaları bile Rabbimiz duyar arkadaşlar.", "duygu": "huzur" },
+  { "id": 28, "isim": "El-Basir", "manasi": "Her şeyi en iyi gören.", "erva_hoca_anlatimi": "Karanlıkta yürüyen karıncayı bile gören bir Rabbimiz var.", "duygu": "nurlu_bakis" },
+  { "id": 29, "isim": "El-Hakem", "manasi": "Mutlak hakim, hakkı yerine getiren.", "erva_hoca_anlatimi": "En doğru kararı her zaman O verir.", "duygu": "ciddi" },
+  { "id": 30, "isim": "El-Adl", "manasi": "Çok adaletli olan.", "erva_hoca_anlatimi": "Kimseye haksızlık etmez, herkese hakkını tam verir.", "duygu": "guven" },
+  { "id": 31, "isim": "El-Latif", "manasi": "Lütuf ve ihsan sahibi, ince işleri bilen.", "erva_hoca_anlatimi": "Rabbimiz bize karşı çok nazik ve lütufkardır.", "duygu": "sefkat" },
+  { "id": 32, "isim": "El-Habir", "manasi": "Her şeyden haberdar olan.", "erva_hoca_anlatimi": "Gizli saklı hiçbir şey O'ndan kaçmaz.", "duygu": "sakin" },
+  { "id": 33, "isim": "El-Halim", "manasi": "Cezalandırmada acele etmeyen, yumuşak.", "erva_hoca_anlatimi": "Hata yaptığımızda bize hemen kızmaz, düzelmemiz için vakit verir.", "duygu": "huzur" },
+  { "id": 34, "isim": "El-Azim", "manasi": "Pek yüce ve ulu.", "erva_hoca_anlatimi": "O'nun büyüklüğünü hayal bile edemeyiz arkadaşlar.", "duygu": "gururlu" },
+  { "id": 35, "isim": "El-Gafur", "manasi": "Affı ve bağışlaması bol olan.", "erva_hoca_anlatimi": "Tövbeleri kabul eden, bizi temizleyendir.", "duygu": "tebessum" },
+  { "id": 36, "isim": "Eş-Şekur", "manasi": "Az amele çok sevap veren.", "erva_hoca_anlatimi": "Küçücük bir iyiliğimize bile dağlar kadar sevap yazabilir.", "duygu": "mutlu" },
+  { "id": 37, "isim": "El-Aliy", "manasi": "Yücelerin yücesi.", "erva_hoca_anlatimi": "O'ndan daha yüksek hiçbir makam yoktur.", "duygu": "nurlu_bakis" },
+  { "id": 38, "isim": "El-Kebir", "manasi": "En büyük olan.", "erva_hoca_anlatimi": "Dünya O'nun yanında küçücük bir nokta gibidir.", "duygu": "gururlu" },
+  { "id": 39, "isim": "El-Hafiz", "manasi": "Her şeyi koruyan, muhafaza eden.", "erva_hoca_anlatimi": "Bizi kazalardan, belalardan koruyan koruyucumuzdur.", "duygu": "guven" },
+  { "id": 40, "isim": "El-Mukit", "manasi": "Her canlının gıdasını veren.", "erva_hoca_anlatimi": "Aç kalan hiçbir canlıyı Rabbimiz unutmaz.", "duygu": "tebessum" },
+  { "id": 41, "isim": "El-Hasib", "manasi": "Hesap gören, her şeye yeten.", "erva_hoca_anlatimi": "O bize yeter, başka kimseye ihtiyacımız yok.", "duygu": "huzur" },
+  { "id": 42, "isim": "El-Celil", "manasi": "Azamet ve celal sahibi.", "erva_hoca_anlatimi": "Heybetiyle kalpleri titreten ama sevgi dolu olan.", "duygu": "nurlu_bakis" },
+  { "id": 43, "isim": "El-Kerim", "manasi": "Çok cömert ve lütufkar.", "erva_hoca_anlatimi": "İstemeden veren, verdikçe sevinen Rabbimiz.", "duygu": "neseli" },
+  { "id": 44, "isim": "Er-Rakib", "manasi": "Her an gözeten, kontrol eden.", "erva_hoca_anlatimi": "Rabbimizin bizi izlemesi en güvenli yerdir.", "duygu": "sakin" },
+  { "id": 45, "isim": "El-Mucib", "manasi": "Duaları kabul eden.", "erva_hoca_anlatimi": "'Allah'ım' dediğimizde 'Buyur kulum' diyen Rabbimiz.", "duygu": "mutlu" },
+  { "id": 46, "isim": "El-Vasi", "manasi": "İlmi ve rahmeti her şeyi kuşatan.", "erva_hoca_anlatimi": "O'nun hazinesi bitmez, sevgisi tükenmez.", "duygu": "huzur" },
+  { "id": 47, "isim": "El-Hakim", "manasi": "Her işi hikmetli ve yerli yerinde.", "erva_hoca_anlatimi": "Neden böyle oldu demeyelim, O en doğrusunu bilir.", "duygu": "tebessum" },
+  { "id": 48, "isim": "El-Vedüd", "manasi": "Sevilmeye layık, kullarını çok seven.", "erva_hoca_anlatimi": "Sevginin asıl kaynağı O'dur arkadaşlar.", "duygu": "sevgi" },
+  { "id": 49, "isim": "El-Mecid", "manasi": "Şanı yüce, keremi bol.", "erva_hoca_anlatimi": "Övgülerin en güzeli sadece O'na yakışır.", "duygu": "nurlu_bakis" },
+  { "id": 50, "isim": "El-Bais", "manasi": "Öldükten sonra dirilten.", "erva_hoca_anlatimi": "Bizi yeniden uyandırıp bayramlara kavuşturacak olan O'dur.", "duygu": "nurlu_gulucuk" },
+  { "id": 51, "isim": "Eş-Şehid", "manasi": "Her şeye şahit olan.", "erva_hoca_anlatimi": "İyiliklerimizi kimse görmese de O görüyor ya, o bize yeter.", "duygu": "guven" },
+  { "id": 52, "isim": "El-Hakk", "manasi": "Varlığı hiç değişmeyen, gerçek olan.", "erva_hoca_anlatimi": "Her şey biter ama Rabbimiz hep vardır.", "duygu": "huzur" },
+  { "id": 53, "isim": "El-Vekil", "manasi": "İşlerini kendisine bırakanların yardımcısı.", "erva_hoca_anlatimi": "İşlerimizi O'na emanet edelim, O en güzelini yapar.", "duygu": "tebessum" },
+  { "id": 54, "isim": "El-Kaviy", "manasi": "Pek güçlü, kudretli.", "erva_hoca_anlatimi": "O'nun gücünün yettiği hiçbir şey imkansız değildir.", "duygu": "gururlu" },
+  { "id": 55, "isim": "El-Metin", "manasi": "Çok sağlam, sarsılmaz.", "erva_hoca_anlatimi": "Rabbimize dayanan asla yere düşmez.", "duygu": "guven" },
+  { "id": 56, "isim": "El-Veliy", "manasi": "Müminlerin dostu ve yardımcısı.", "erva_hoca_anlatimi": "En iyi dostumuz Allah'tır arkadaşlar.", "duygu": "sevgi" },
+  { "id": 57, "isim": "El-Hamid", "manasi": "Her türlü övgüye layık olan.", "erva_hoca_anlatimi": "Her gün 'Elhamdülillah' diyerek O'nu analım.", "duygu": "mutlu" },
+  { "id": 58, "isim": "El-Muhsi", "manasi": "Her şeyin sayısını tek tek bilen.", "erva_hoca_anlatimi": "Saç tellerimizden yağmur damlalarına kadar her şeyi sayan O'dur.", "duygu": "sakin" },
+  { "id": 59, "isim": "El-Mübdi", "manasi": "Her şeyi örneksiz ilk defa yaratan.", "erva_hoca_anlatimi": "Tasarım harikası olan her şeyi O başlattı.", "duygu": "nurlu_bakis" },
+  { "id": 60, "isim": "El-Muid", "manasi": "Varlıkları öldükten sonra tekrar yaratan.", "erva_hoca_anlatimi": "Yeniden başlamak için bize her zaman güç veren.", "duygu": "huzur" },
+  { "id": 61, "isim": "El-Muhyi", "manasi": "Can veren, hayat bağışlayan.", "erva_hoca_anlatimi": "Kalplerimizi imanla dirilten Rabbimiz.", "duygu": "tebessum" },
+  { "id": 62, "isim": "El-Mümit", "manasi": "Canlıları öldüren.", "erva_hoca_anlatimi": "Ölümü de hayat gibi hayırlı kılan O'dur.", "duygu": "ciddi" },
+  { "id": 63, "isim": "El-Hayy", "manasi": "Daima diri, ölümsüz.", "erva_hoca_anlatimi": "O her zaman canlıdır ve bizi hep duyar.", "duygu": "nurlu_bakis" },
+  { "id": 64, "isim": "El-Kayyum", "manasi": "Her şeyi ayakta tutan.", "erva_hoca_anlatimi": "Göklerin ve yerin düzeni O'na bağlıdır.", "duygu": "gururlu" },
+  { "id": 65, "isim": "El-Vacid", "manasi": "İstediğini istediği an bulan.", "erva_hoca_anlatimi": "O'ndan gizlenen hiçbir şey olamaz.", "duygu": "sakin" },
+  { "id": 66, "isim": "El-Macid", "manasi": "Kadr-ü şanı büyük olan.", "erva_hoca_anlatimi": "Cömertliğiyle bize her zaman sürpriz yapan.", "duygu": "mutlu" },
+  { "id": 67, "isim": "El-Vahid", "manasi": "Tek olan, eşi benzeri olmayan.", "erva_hoca_anlatimi": "Bir tane Güneş, bir tane Rabbimiz var arkadaşlar.", "duygu": "huzur" },
+  { "id": 68, "isim": "Es-Samed", "manasi": "Hiçbir şeye ihtiyacı olmayan, her şey O'na muhtaç.", "erva_hoca_anlatimi": "Biz O'na koşarız, O her ihtiyacımızı giderir.", "duygu": "tebessum" },
+  { "id": 69, "isim": "El-Kadir", "manasi": "İstediğini yapmaya gücü yeten.", "erva_hoca_anlatimi": "O'nun için 'zor' diye bir şey yoktur.", "duygu": "gururlu" },
+  { "id": 70, "isim": "El-Muktedir", "manasi": "Kudret sahipleri üzerinde tasarruf eden.", "erva_hoca_anlatimi": "Güçlülerin en güçlüsü.", "duygu": "gururlu" },
+  { "id": 71, "isim": "El-Mukaddim", "manasi": "İstediğini öne alan.", "erva_hoca_anlatimi": "Bizi iyiliklerde öne geçiren.", "duygu": "neseli" },
+  { "id": 72, "isim": "El-Muahhir", "manasi": "İstediğini geriye bırakan.", "erva_hoca_anlatimi": "Her şeyin bir vakti var, O en doğrusunu bekletir.", "duygu": "sakin" },
+  { "id": 73, "isim": "El-Evvel", "manasi": "Her şeyden önce olan.", "erva_hoca_anlatimi": "Zaman yokken O vardı.", "duygu": "nurlu_bakis" },
+  { "id": 74, "isim": "El-Ahir", "manasi": "Her şeyden sonra olan.", "erva_hoca_anlatimi": "Her şey biter, O kalır.", "duygu": "huzur" },
+  { "id": 75, "isim": "Ez-Zahir", "manasi": "Varlığı apaçık görünen.", "erva_hoca_anlatimi": "Baktığımız her güzel çiçekte O'nu görürüz.", "duygu": "nurlu_gulucuk" },
+  { "id": 76, "isim": "El-Batin", "manasi": "Gizli olan, sırları bilen.", "erva_hoca_anlatimi": "Gözle görülmez ama kalple hissedilir.", "duygu": "huzur" },
+  { "id": 77, "isim": "El-Vali", "manasi": "Kainatı idare eden.", "erva_hoca_anlatimi": "Büyük fabrikanın tek sahibi gibi her şeyi yöneten.", "duygu": "gururlu" },
+  { "id": 78, "isim": "El-Müteali", "manasi": "Eksikliklerden münezzeh, yüce.", "erva_hoca_anlatimi": "Aklımıza gelen her türlü kusurdan uzaktır.", "duygu": "nurlu_bakis" },
+  { "id": 79, "isim": "El-Berr", "manasi": "İyilik ve lütfu bol olan.", "erva_hoca_anlatimi": "Bize hep güzel şeyler dileyen Rabbimiz.", "duygu": "tebessum" },
+  { "id": 80, "isim": "Et-Tevvab", "manasi": "Tövbeleri çokça kabul eden.", "erva_hoca_anlatimi": "Kucağını bize her zaman açan.", "duygu": "mutlu" },
+  { "id": 81, "isim": "El-Müntakim", "manasi": "Suçluları adaletiyle cezalandıran.", "erva_hoca_anlatimi": "Kimsenin hakkını kimsede bırakmaz.", "duygu": "ciddi" },
+  { "id": 82, "isim": "El-Afüvv", "manasi": "Günahları silip süpüren.", "erva_hoca_anlatimi": "Sanki hiç yapmamışız gibi bizi tertemiz yapan.", "duygu": "huzur" },
+  { "id": 83, "isim": "Er-Rauf", "manasi": "Çok şefkatli, çok merhametli.", "erva_hoca_anlatimi": "Bize bir anneden daha şefkatli davranan.", "duygu": "sefkat" },
+  { "id": 84, "isim": "Malikü'l-Mülk", "manasi": "Mülkün gerçek sahibi.", "erva_hoca_anlatimi": "Sahip olduğumuz her şey aslında O'nun emaneti.", "duygu": "sakin" },
+  { "id": 85, "isim": "Zül-Celali vel-İkram", "manasi": "Hem azamet hem de kerem sahibi.", "erva_hoca_anlatimi": "Kendisinden hem korkulan hem de çok sevilen.", "duygu": "nurlu_bakis" },
+  { "id": 86, "isim": "El-Muksit", "manasi": "Hükmünde adil olan.", "erva_hoca_anlatimi": "Terazisi asla şaşmaz arkadaşlar.", "duygu": "guven" },
+  { "id": 87, "isim": "El-Cami", "manasi": "İstediğini istediği an toplayan.", "erva_hoca_anlatimi": "Mahşerde hepimizi bir araya getirecek olan.", "duygu": "huzur" },
+  { "id": 88, "isim": "El-Ganiy", "manasi": "Çok zengin, kimseye muhtaç olmayan.", "erva_hoca_anlatimi": "Evrendeki tüm hazineler O'nundur.", "duygu": "neseli" },
+  { "id": 89, "isim": "El-Muğni", "manasi": "Dilediğini zengin kılan.", "erva_hoca_anlatimi": "Kalbimizi zenginleştiren, bize veren.", "duygu": "mutlu" },
+  { "id": 90, "isim": "El-Mani", "manasi": "Dilediğine engel olan.", "erva_hoca_anlatimi": "Bazen bir şeyi vermemesi bizim iyiliğimiz içindir.", "duygu": "sakin" },
+  { "id": 91, "isim": "Ed-Darr", "manasi": "Elem ve zarar veren şeyleri yaratan.", "erva_hoca_anlatimi": "Zorlukları da bizi güçlendirmek için yaratır.", "duygu": "ciddi" },
+  { "id": 92, "isim": "En-Nafi", "manasi": "Fayda veren şeyleri yaratan.", "erva_hoca_anlatimi": "Şifayı ve güzelliği veren O'dur.", "duygu": "neseli" },
+  { "id": 93, "isim": "En-Nur", "manasi": "Aydınlatan, nurlandıran.", "erva_hoca_anlatimi": "Karanlık kalpleri ışıl ışıl yapan.", "duygu": "nurlu_gulucuk" },
+  { "id": 94, "isim": "El-Hadi", "manasi": "Hidayet veren, doğru yolu gösteren.", "erva_hoca_anlatimi": "Yolumuzu kaybettiğimizde elimizden tutan.", "duygu": "tebessum" },
+  { "id": 95, "isim": "El-Bedî", "manasi": "Eşi benzeri olmayan güzellikleri yaratan.", "erva_hoca_anlatimi": "O'nun sanatı her yerde arkadaşlar.", "duygu": "nurlu_bakis" },
+  { "id": 96, "isim": "El-Baki", "manasi": "Varlığının sonu olmayan.", "erva_hoca_anlatimi": "Sonsuzluğun tek sahibi.", "duygu": "huzur" },
+  { "id": 97, "isim": "El-Varis", "manasi": "Her şeyin asıl sahibi.", "erva_hoca_anlatimi": "Her şey bittiğinde mülk yine O'na kalacak.", "duygu": "sakin" },
+  { "id": 98, "isim": "Er-Reşid", "manasi": "Doğru yolu en iyi gösteren.", "erva_hoca_anlatimi": "En akıllıca kararları O öğretir.", "duygu": "tebessum" },
+  { "id": 99, "isim": "Es-Sabur", "manasi": "Çok sabırlı olan.", "erva_hoca_anlatimi": "Bize karşı hep sabırlı davranan Rabbimiz.", "duygu": "huzur" },
+  { "id": 100, "isim": "El-Kafi", "manasi": "Kullarına yeten.", "erva_hoca_anlatimi": "Arkadaşlar, 1000 hadisten sonra 100 ismi de tamamladık. Rabbimiz bize yeter!", "duygu": "nurlu_gulucuk" }
+  ];
+
   
-  
 
 
 
-];
-
-
-
-// ERVA HOCA NİYET ANALİZ MOTORU
-function ervaSoruAnla(cocukNeDedi) {
-    let soru = cocukNeDedi.toLowerCase(); // Küçük harfe çevir ki hata olmasın
-    let bulunanHadisler = [];
-
-    // Niyet Analizi Başlıyor
-    if (soru.includes("aile") || soru.includes("anne") || soru.includes("baba")) {
-        bulunanHadisler = kadriye_dersleri.filter(h => h.kategori === "Aile" || h.id === 22 || h.id === 33 || h.id === 55 || h.id === 84);
-    } 
-    else if (soru.includes("temiz") || soru.includes("abdest") || soru.includes("el yıkama")) {
-        bulunanHadisler = kadriye_dersleri.filter(h => h.kategori === "Temizlik" || h.id === 12 || h.id === 42 || h.id === 88);
-    }
-    else if (soru.includes("yalan") || soru.includes("doğru") || soru.includes("dürüst")) {
-        bulunanHadisler = kadriye_dersleri.filter(h => h.kategori === "Dürüstlük" || h.id === 5 || h.id === 13 || h.id === 18 || h.id === 79);
-    }
-
-    // Erva Hoca Cevap Veriyor
-    if (bulunanHadisler.length > 0) {
-        // En fazla 3 tane seç ve anlat
-        let secilenler = bulunanHadisler.slice(0, 3); 
-        return secilenler;
-    } else {
-        return "Bunu tam anlayamadım arkadaşım, başka bir şey sormak ister misin?";
+// ERVA HOCA NİYET VE HAFIZA MOTORU (DÜZENLENMİŞ)
+function ervaAnlat(id) {
+    const hadis = kadriye_dersleri.find(h => h.id === id);
+    if (hadis) {
+        ErvaHocaHafiza.kaydet(id); // Çocuk dinledikçe yerini kaydet
+        return hadis;
     }
 }
 
-
-
+// Erva Hoca'nın Akıllı Hafızası
+const ErvaHocaHafiza = {
+    kaydet: (hadisId) => {
+        localStorage.setItem('erva_hoca_son_durum', hadisId);
+    },
+    getir: () => {
+        return parseInt(localStorage.getItem('erva_hoca_son_durum')) || 1;
+    },
+    dersi_devam_ettir: () => {
+        let kalinan = ErvaHocaHafiza.getir();
+        return ervaAnlat(kalinan); // Kaldığı yerden hadisi getirir
+    }
+};
 
 
