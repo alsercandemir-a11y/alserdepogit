@@ -1020,29 +1020,74 @@ const esmaul_husna_dersleri = [
 
   
 
+// ==========================================
+// ERVA HOCA - DİJİTAL MEDRESE YÖNETİM MERKEZİ
+// ==========================================
 
+// 1. VERİ HAVUZLARI (Buraya daha önce verdiğim listeleri ekle)
+const kadriye_dersleri = [ /* 1000 HADİS BURAYA */ ];
+const esmaul_husna_dersleri = [ /* 100 ESMA BURAYA */ ];
+const peygamber_hayati_hatiralar = [ /* 100 HATIRA BURAYA */ ];
 
-// ERVA HOCA NİYET VE HAFIZA MOTORU (DÜZENLENMİŞ)
-function ervaAnlat(id) {
-    const hadis = kadriye_dersleri.find(h => h.id === id);
-    if (hadis) {
-        ErvaHocaHafiza.kaydet(id); // Çocuk dinledikçe yerini kaydet
-        return hadis;
-    }
-}
-
-// Erva Hoca'nın Akıllı Hafızası
+// 2. ERVA HOCA AKILLI HAFIZA (LOCAL STORAGE)
 const ErvaHocaHafiza = {
-    kaydet: (hadisId) => {
-        localStorage.setItem('erva_hoca_son_durum', hadisId);
+    kaydet: (tur, id) => {
+        localStorage.setItem('erva_son_' + tur, id);
     },
-    getir: () => {
-        return parseInt(localStorage.getItem('erva_hoca_son_durum')) || 1;
-    },
-    dersi_devam_ettir: () => {
-        let kalinan = ErvaHocaHafiza.getir();
-        return ervaAnlat(kalinan); // Kaldığı yerden hadisi getirir
+    getir: (tur) => {
+        return parseInt(localStorage.getItem('erva_son_' + tur)) || 1;
     }
 };
 
+// 3. ERVA HOCA KARŞILAMA VE NİYET ANALİZİ
+function ervaSoyle(gelenMesaj) {
+    let m = gelenMesaj.toLowerCase();
+    let cevap = "";
+
+    // AÇILIŞ / SELAMLAŞMA
+    if (m === "merhaba" || m === "başla") {
+        return "Selam arkadaşım! Ben Erva Hoca. Senin için tam 1000 Hadis, 100 Esmaül Hüsna ve Efendimiz'in hayatından 100 hatıra hazırladım. Nereden başlayalım?";
+    }
+
+    // ESMAÜL HÜSNA ANALİZİ
+    if (m.includes("esma") || m.includes("isim")) {
+        let id = ErvaHocaHafiza.getir('esma');
+        let data = esmaul_husna_dersleri.find(e => e.id === id);
+        if (data) {
+            ErvaHocaHafiza.kaydet('esma', (id % 100) + 1); // 100'e gelince başa dön
+            cevap = `✨ Rabbimizin ${data.id}. İsmi: **${data.isim}**\n📖 Manası: ${data.manasi}\n🎤 Erva Hocan diyor ki: ${data.erva_hoca_anlatimi}`;
+        }
+    } 
+    // HADİS ANALİZİ
+    else if (m.includes("hadis")) {
+        let id = ErvaHocaHafiza.getir('hadis');
+        let data = kadriye_dersleri.find(h => h.id === id);
+        if (data) {
+            ErvaHocaHafiza.kaydet('hadis', (id % 1000) + 1);
+            cevap = `📜 Peygamberimiz buyurdu ki: "${data.hadis_metni}"\n🎤 Erva Hocan diyor ki: ${data.erva_hoca_anlatimi}`;
+        }
+    }
+    // SİYER / HATIRA ANALİZİ
+    else if (m.includes("hatıra") || m.includes("kıssa") || m.includes("peygamberimiz")) {
+        let id = ErvaHocaHafiza.getir('siyer');
+        let data = peygamber_hayati_hatiralar.find(s => s.id === id);
+        if (data) {
+            ErvaHocaHafiza.kaydet('siyer', (id % 100) + 1);
+            cevap = `🌹 Efendimiz'den Bir Hatıra: **${data.baslik}**\n🎤 Dinle bak: ${data.erva_hoca_anlatimi}`;
+        }
+    }
+    else {
+        cevap = "Canım arkadaşım, bana 'Hadis', 'Esma' veya 'Hatıra' dersen sana hemen anlatabilirim!";
+    }
+
+    return cevap;
+}
+
+// 4. BLOGGER ARAYÜZ BAĞLANTISI (DOM)
+function ekranaYaz(mesaj) {
+    const baloncuk = document.getElementById('konusma-baloncugu');
+    if(baloncuk) {
+        baloncuk.innerHTML = mesaj.replace(/\n/g, "<br>");
+    }
+}
 
